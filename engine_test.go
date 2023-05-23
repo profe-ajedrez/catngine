@@ -174,7 +174,7 @@ func BenchmarkMinimaxWinner(b *testing.B) {
 	_ = bd.Set(0, 0, P)
 	_ = bd.Set(1, 0, F)
 	_ = bd.Set(0, 1, P)
-	_ = bd.Set(1, 1, P)
+	_ = bd.Set(1, 1, F)
 	_ = bd.Set(0, 2, P)
 
 	b.ResetTimer()

@@ -21,7 +21,7 @@ var (
 	ErrOutOfMinimaxBounds = errors.New("out of Minimax bounds")
 
 	// ErrNoEmptyCell se gatilla cuando se intenta adueñarse de una casilla que ya tiene dueño
-	ErrNoEmptyCell = errors.New("tha cell is not empty")
+	ErrNoEmptyCell = errors.New("that cell is not empty")
 
 	MinimaxWinningStates = [][]int8{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, {0, 4, 8}, {2, 4, 6}}
 )
@@ -41,7 +41,7 @@ type Minimax struct {
 }
 
 func NewMinimax() *Minimax {
-	return &Minimax{g: make([]int8, 9)}
+	return &Minimax{g: make([]int8, 9), turn: 1}
 }
 
 func (m *Minimax) Turn() int8 {
