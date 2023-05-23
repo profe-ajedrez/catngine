@@ -16,8 +16,8 @@ func TestMinimaxMap(t *testing.T) {
 		{
 			x:              9,
 			y:              9,
-			msg:            "MinimaxMap: expected ErrOutOfMinimaxBounds error. %v received",
-			expectedErr:    ErrOutOfMinimaxBounds,
+			msg:            "MinimaxMap: expected ErrOutOfBoardBounds error. %v received",
+			expectedErr:    ErrOutOfBoardBounds,
 			msgMapped:      "",
 			expectedMapped: 0,
 		},
@@ -32,8 +32,8 @@ func TestMinimaxMap(t *testing.T) {
 		{
 			x:              -1,
 			y:              -2,
-			msg:            "MinimaxMap: expected ErrOutOfMinimaxBounds error. %v received",
-			expectedErr:    ErrOutOfMinimaxBounds,
+			msg:            "MinimaxMap: expected ErrOutOfBoardBounds error. %v received",
+			expectedErr:    ErrOutOfBoardBounds,
 			msgMapped:      "",
 			expectedMapped: 0,
 		},
@@ -161,6 +161,8 @@ func BenchmarkMinimaxEvaluate(b *testing.B) {
 	_ = bd.Set(0, 0, P)
 	_ = bd.Set(1, 0, F)
 	_ = bd.Set(0, 1, P)
+
+	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
 		_ = bd.Evaluate(F)

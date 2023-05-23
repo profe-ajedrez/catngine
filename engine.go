@@ -17,8 +17,8 @@ const (
 )
 
 var (
-	// ErrOutOfMinimaxBounds es el error que se gatilla cuando se intenta acceder a una casilla fuera de los límites del mundo del juego
-	ErrOutOfMinimaxBounds = errors.New("out of Minimax bounds")
+	// ErrOutOfBoardBounds es el error que se gatilla cuando se intenta acceder a una casilla fuera de los límites del mundo del juego
+	ErrOutOfBoardBounds = errors.New("out of Minimax bounds")
 
 	// ErrNoEmptyCell se gatilla cuando se intenta adueñarse de una casilla que ya tiene dueño
 	ErrNoEmptyCell = errors.New("that cell is not empty")
@@ -52,7 +52,7 @@ func (b *Minimax) m(x, y int8) (int8, error) {
 	i := y + 3*x
 
 	if i < 0 || i > 8 {
-		return 0, ErrOutOfMinimaxBounds
+		return 0, ErrOutOfBoardBounds
 	}
 	return i, nil
 }
@@ -77,7 +77,7 @@ func (b *Minimax) Set(x, y int8, p int8) error {
 
 func (b *Minimax) SetI8(i int8, p int8) error {
 	if i < 0 || i > 8 {
-		return ErrOutOfMinimaxBounds
+		return ErrOutOfBoardBounds
 	}
 
 	if b.g[i] != E {
@@ -162,8 +162,8 @@ func miniMax(b *Minimax, depth int8, p int8) int8 {
 
 	maxTrack := 8
 
-	if b.Turn() <= 1 {
-		maxTrack = 2
+	if b.Turn() <= 2 {
+		maxTrack = 4
 	}
 
 	for i := 0; i <= maxTrack; i++ {
