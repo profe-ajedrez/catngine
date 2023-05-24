@@ -36,16 +36,11 @@ type Catngine interface {
 }
 
 type Minimax struct {
-	turn int8
-	g    []int8
+	g []int8
 }
 
 func NewMinimax() *Minimax {
-	return &Minimax{g: make([]int8, 9), turn: 1}
-}
-
-func (m *Minimax) Turn() int8 {
-	return m.turn / int8(2)
+	return &Minimax{g: make([]int8, 9)}
 }
 
 func (b *Minimax) m(x, y int8) (int8, error) {
@@ -69,8 +64,6 @@ func (b *Minimax) Set(x, y int8, p int8) error {
 	}
 
 	b.g[i] = p
-
-	b.turn++
 
 	return nil
 }
@@ -160,13 +153,7 @@ func miniMax(b *Minimax, depth int8, p int8) int8 {
 		mark = -20
 	}
 
-	maxTrack := 8
-
-	if b.Turn() <= 2 {
-		maxTrack = 4
-	}
-
-	for i := 0; i <= maxTrack; i++ {
+	for i := 0; i <= 8; i++ {
 		if b.g[i] == E {
 			if p == P {
 				b.g[i] = P
