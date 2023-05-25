@@ -33,6 +33,7 @@ type Catngine interface {
 	Set(x, y int8, p int8) error
 	String() string
 	Winner(p int8) bool
+	Board() []int8
 }
 
 type Minimax struct {
@@ -42,6 +43,12 @@ type Minimax struct {
 
 func NewMinimax() *Minimax {
 	return &Minimax{g: make([]int8, 9), turn: 1}
+}
+
+func (m *Minimax) Board() []int8 {
+	var g []int8
+	copy(g, m.g)
+	return g
 }
 
 func (m *Minimax) Turn() int8 {
