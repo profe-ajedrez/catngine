@@ -132,14 +132,40 @@ func TestMinimaxEvaluate(t *testing.T) {
 			},
 			expected: 1,
 		},
+		{
+			Minimaxer: func() *Minimax {
+				b := NewMinimax()
+
+				_ = b.Set(2, 0, F)
+				_ = b.Set(1, 2, P)
+				_ = b.Set(2, 1, F)
+				_ = b.Set(0, 2, P)
+
+				return b
+			},
+			expected: 8,
+		},
+		{
+			Minimaxer: func() *Minimax {
+				b := NewMinimax()
+
+				_ = b.Set(0, 2, F)
+				_ = b.Set(2, 2, P)
+				_ = b.Set(1, 1, F)
+				_ = b.Set(1, 2, P)
+
+				return b
+			},
+			expected: 6,
+		},
 	}
 
 	for i, cs := range testCase {
 		t.Logf("test case %v", i+1)
 		b := cs.Minimaxer()
 
-		t.Log("before")
-		t.Logf("\n%v", b.String())
+		//t.Log("before")
+		//t.Logf("\n%v", b.String())
 		nextMove := b.Evaluate(F)
 
 		if nextMove != cs.expected {
@@ -149,9 +175,9 @@ func TestMinimaxEvaluate(t *testing.T) {
 
 		_ = b.SetI8(nextMove, F)
 
-		t.Log("after")
-		t.Logf("\n%v", b.String())
-		t.Log("------------------------------------")
+		//t.Log("after")
+		//t.Logf("\n%v", b.String())
+		//t.Log("------------------------------------")
 	}
 }
 

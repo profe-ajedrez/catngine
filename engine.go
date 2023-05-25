@@ -18,7 +18,7 @@ const (
 
 var (
 	// ErrOutOfBoardBounds es el error que se gatilla cuando se intenta acceder a una casilla fuera de los límites del mundo del juego
-	ErrOutOfBoardBounds = errors.New("out of Minimax bounds")
+	ErrOutOfBoardBounds = errors.New("out of board bounds")
 
 	// ErrNoEmptyCell se gatilla cuando se intenta adueñarse de una casilla que ya tiene dueño
 	ErrNoEmptyCell = errors.New("that cell is not empty")
@@ -36,11 +36,16 @@ type Catngine interface {
 }
 
 type Minimax struct {
-	g []int8
+	turn int8
+	g    []int8
 }
 
 func NewMinimax() *Minimax {
-	return &Minimax{g: make([]int8, 9)}
+	return &Minimax{g: make([]int8, 9), turn: 1}
+}
+
+func (m *Minimax) Turn() int8 {
+	return m.turn / int8(2)
 }
 
 func (b *Minimax) m(x, y int8) (int8, error) {
@@ -64,6 +69,8 @@ func (b *Minimax) Set(x, y int8, p int8) error {
 	}
 
 	b.g[i] = p
+
+	b.turn++
 
 	return nil
 }
@@ -135,8 +142,6 @@ func checkWin(b *Minimax, p int8) bool {
 		(b.g[0] == p && b.g[4] == p && b.g[8] == p) ||
 		(b.g[2] == p && b.g[4] == p && b.g[6] == p)
 }
-
-type States []*Minimax
 
 func miniMax(b *Minimax, depth int8, p int8) int8 {
 	mark := int8(20)
