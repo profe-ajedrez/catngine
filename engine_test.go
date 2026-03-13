@@ -183,20 +183,26 @@ func TestMinimaxEvaluate(t *testing.T) {
 	}
 }
 
-var mapResult int8
 var winnerResult bool
 var evalResult int8
 
 func BenchmarkMinimaxMap(b *testing.B) {
-    bd := NewMinimax()
-    for i := 0; i < b.N; i++ { // era <=
-        mapResult, _ = bd.m(1, 2)
-    }
+
+	bd := NewMinimax()
+
+	for i := 0; i <= b.N; i++ {
+		_, _ = bd.m(0, 0)
+	}
+
 }
 
 func BenchmarkMinimaxWinner(b *testing.B) {
     bd := NewMinimax()
-    // ... setup con las coordenadas corregidas del Winner test ...
+    _ = bd.Set(0, 0, P)
+	_ = bd.Set(1, 0, F)
+	_ = bd.Set(0, 1, P)
+	_ = bd.Set(1, 1, F)
+	_ = bd.Set(0, 2, P)
     b.ResetTimer()
     for i := 0; i < b.N; i++ {
         winnerResult = bd.Winner(P)
@@ -204,7 +210,10 @@ func BenchmarkMinimaxWinner(b *testing.B) {
 }
 
 func BenchmarkMinimaxEvaluate(b *testing.B) {
-    // ... setup igual ...
+	bd := NewMinimax()
+    _ = bd.Set(0, 0, P)
+	_ = bd.Set(1, 0, F)
+	_ = bd.Set(0, 1, P)
     b.ResetTimer()
     for i := 0; i < b.N; i++ {
         evalResult = bd.Evaluate(F)
