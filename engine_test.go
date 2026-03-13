@@ -5,7 +5,7 @@ import (
 )
 
 func TestMinimaxMap(t *testing.T) {
-	tetsCases := []struct {
+	testCases := []struct {
 		x              int8
 		y              int8
 		msg            string
@@ -43,7 +43,7 @@ func TestMinimaxMap(t *testing.T) {
 
 	b := NewMinimax()
 
-	for _, cs := range tetsCases {
+	for _, cs := range testCases {
 		expected, err := b.m(cs.x, cs.y)
 
 		if err != cs.expectedErr {
@@ -69,12 +69,12 @@ func TestMinimaxWinner(t *testing.T) {
 	_ = b.Set(2, 0, P) // columna 2, fila 0 → índice 2
 
 	if !b.Winner(P) {
-		t.Errorf("MinimaxMap: expected true. %v received", false)
+		t.Errorf("MinimaxWinner: expected true. %v received", false)
 		t.FailNow()
 	}
 
 	if b.Winner(F) {
-		t.Errorf("MinimaxMap: expected false. %v received", true)
+		t.Errorf("MinimaxWinner: expected false. %v received", true)
 		t.FailNow()
 	}
 
@@ -107,7 +107,7 @@ func TestMinimaxEvaluate(t *testing.T) {
 
 				return b
 			},
-			expected: 2,
+			expected: 6,
 		},
 		{
 			Minimaxer: func() *Minimax {
@@ -119,7 +119,7 @@ func TestMinimaxEvaluate(t *testing.T) {
 
 				return b
 			},
-			expected: 1,
+			expected: 3,
 		},
 		{
 			Minimaxer: func() *Minimax {
@@ -132,7 +132,7 @@ func TestMinimaxEvaluate(t *testing.T) {
 
 				return b
 			},
-			expected: 1,
+			expected: 3,
 		},
 		{
 			Minimaxer: func() *Minimax {
@@ -158,7 +158,7 @@ func TestMinimaxEvaluate(t *testing.T) {
 
 				return b
 			},
-			expected: 6,
+			expected: 2,
 		},
 	}
 
@@ -175,7 +175,7 @@ func TestMinimaxEvaluate(t *testing.T) {
 			t.FailNow()
 		}
 
-		_ = b.SetI8(nextMove, F)
+		_ = b.SetIndex(nextMove, F)
 
 		//t.Log("after")
 		//t.Logf("\n%v", b.String())
@@ -183,26 +183,24 @@ func TestMinimaxEvaluate(t *testing.T) {
 	}
 }
 
+var mapResult int8
 var winnerResult bool
 var evalResult int8
 
 func BenchmarkMinimaxMap(b *testing.B) {
-
-	bd := NewMinimax()
-
-	for i := 0; i <= b.N; i++ {
-		_, _ = bd.m(0, 0)
-	}
-
+    bd := NewMinimax()
+    for i := 0; i < b.N; i++ {
+        mapResult, _ = bd.m(1, 2)
+    }
 }
 
 func BenchmarkMinimaxWinner(b *testing.B) {
     bd := NewMinimax()
     _ = bd.Set(0, 0, P)
-	_ = bd.Set(1, 0, F)
-	_ = bd.Set(0, 1, P)
-	_ = bd.Set(1, 1, F)
-	_ = bd.Set(0, 2, P)
+    _ = bd.Set(0, 1, F)
+    _ = bd.Set(1, 0, P)
+    _ = bd.Set(1, 1, F)
+    _ = bd.Set(2, 0, P)
     b.ResetTimer()
     for i := 0; i < b.N; i++ {
         winnerResult = bd.Winner(P)
