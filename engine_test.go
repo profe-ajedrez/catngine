@@ -187,12 +187,6 @@ var mapResult int8
 var winnerResult bool
 var evalResult int8
 
-func BenchmarkMinimaxMap(b *testing.B) {
-    bd := NewMinimax()
-    for i := 0; i < b.N; i++ {
-        mapResult, _ = bd.m(1, 2)
-    }
-}
 
 func BenchmarkMinimaxWinner(b *testing.B) {
     bd := NewMinimax()
@@ -215,5 +209,22 @@ func BenchmarkMinimaxEvaluate(b *testing.B) {
     b.ResetTimer()
     for i := 0; i < b.N; i++ {
         evalResult = bd.Evaluate(F)
+    }
+}
+
+
+// sin sink: el compilador puede descartar la llamada
+func BenchmarkMinimaxMapNoSink(b *testing.B) {
+    bd := NewMinimax()
+    for i := 0; i < b.N; i++ {
+        _, _ = bd.m(1, 2)
+    }
+}
+
+// con sink: el resultado se escribe en memoria
+func BenchmarkMinimaxMapSink(b *testing.B) {
+    bd := NewMinimax()
+    for i := 0; i < b.N; i++ {
+        mapResult, _ = bd.m(1, 2)
     }
 }
