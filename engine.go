@@ -55,12 +55,11 @@ func (m *Minimax) Turn() int8 {
 }
 
 func (b *Minimax) m(x, y int8) (int8, error) {
-	i := y + 3*x
-
-	if i < 0 || i > 8 {
-		return 0, ErrOutOfBoardBounds
-	}
-	return i, nil
+    if x < 0 || x > 2 || y < 0 || y > 2 {
+        return 0, ErrOutOfBoardBounds
+    }
+    i := 3*y + x
+    return i, nil
 }
 
 func (b *Minimax) Set(x, y int8, p int8) error {
@@ -131,11 +130,26 @@ func (b *Minimax) Evaluate(p int8) int8 {
 }
 
 func (b *Minimax) String() string {
-	return fmt.Sprintf(" %v | %v | %v \n---+---+---\n %v | %v | %v \n---+---+---\n %v | %v | %v \n", b.g[0], b.g[1], b.g[2], b.g[3], b.g[4], b.g[5], b.g[6], b.g[7], b.g[8])
+    s := [3]string{" ", "X", "O"}
+    return fmt.Sprintf(
+        " %s | %s | %s \n---+---+---\n %s | %s | %s \n---+---+---\n %s | %s | %s \n",
+        s[b.g[0]], s[b.g[1]], s[b.g[2]],
+        s[b.g[3]], s[b.g[4]], s[b.g[5]],
+        s[b.g[6]], s[b.g[7]], s[b.g[8]],
+    )
 }
 
 func (b *Minimax) Winner(p int8) bool {
 	return checkWin(b, p)
+}
+
+func isDraw(b *Minimax) bool {
+    for i := 0; i < 9; i++ {
+        if b.g[i] == E {
+            return false
+        }
+    }
+    return !checkWin(b, P) && !checkWin(b, F)
 }
 
 func checkWin(b *Minimax, p int8) bool {
@@ -158,6 +172,10 @@ func miniMax(b *Minimax, depth int8, p int8) int8 {
 
 	if checkWin(b, F) {
 		return depth - 11
+	}
+
+	if isDraw(b) {
+		return 0
 	}
 
 	if p == P {

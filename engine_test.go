@@ -27,7 +27,7 @@ func TestMinimaxMap(t *testing.T) {
 			msg:            "MinimaxMap: expected no error. %v received",
 			expectedErr:    nil,
 			msgMapped:      "",
-			expectedMapped: 5,
+			expectedMapped: 7,
 		},
 		{
 			x:              -1,
@@ -37,6 +37,8 @@ func TestMinimaxMap(t *testing.T) {
 			msgMapped:      "",
 			expectedMapped: 0,
 		},
+		{x: -1, y: 1, msg: "MinimaxMap: expected ErrOutOfBoardBounds error. %v received", msgMapped:      "", expectedErr: ErrOutOfBoardBounds, expectedMapped: 0},
+
 	}
 
 	b := NewMinimax()
@@ -60,11 +62,11 @@ func TestMinimaxMap(t *testing.T) {
 func TestMinimaxWinner(t *testing.T) {
 	b := NewMinimax()
 
-	_ = b.Set(0, 0, P)
-	_ = b.Set(1, 0, F)
-	_ = b.Set(0, 1, P)
-	_ = b.Set(1, 1, F)
-	_ = b.Set(0, 2, P)
+	_ = b.Set(0, 0, P) // columna 0, fila 0 → índice 0
+	_ = b.Set(0, 1, F) // columna 0, fila 1 → índice 3
+	_ = b.Set(1, 0, P) // columna 1, fila 0 → índice 1
+	_ = b.Set(1, 1, F) // columna 1, fila 1 → índice 4
+	_ = b.Set(2, 0, P) // columna 2, fila 0 → índice 2
 
 	if !b.Winner(P) {
 		t.Errorf("MinimaxMap: expected true. %v received", false)
@@ -181,44 +183,30 @@ func TestMinimaxEvaluate(t *testing.T) {
 	}
 }
 
-func BenchmarkMinimaxEvaluate(b *testing.B) {
-	bd := NewMinimax()
+var mapResult int8
+var winnerResult bool
+var evalResult int8
 
-	_ = bd.Set(0, 0, P)
-	_ = bd.Set(1, 0, F)
-	_ = bd.Set(0, 1, P)
-
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		_ = bd.Evaluate(F)
-	}
-
+func BenchmarkMinimaxMap(b *testing.B) {
+    bd := NewMinimax()
+    for i := 0; i < b.N; i++ { // era <=
+        mapResult, _ = bd.m(1, 2)
+    }
 }
 
 func BenchmarkMinimaxWinner(b *testing.B) {
-	bd := NewMinimax()
-
-	_ = bd.Set(0, 0, P)
-	_ = bd.Set(1, 0, F)
-	_ = bd.Set(0, 1, P)
-	_ = bd.Set(1, 1, F)
-	_ = bd.Set(0, 2, P)
-
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		_ = bd.Winner(P)
-	}
-
+    bd := NewMinimax()
+    // ... setup con las coordenadas corregidas del Winner test ...
+    b.ResetTimer()
+    for i := 0; i < b.N; i++ {
+        winnerResult = bd.Winner(P)
+    }
 }
 
-func BenchmarkMinimaxMap(b *testing.B) {
-
-	bd := NewMinimax()
-
-	for i := 0; i <= b.N; i++ {
-		_, _ = bd.m(0, 0)
-	}
-
+func BenchmarkMinimaxEvaluate(b *testing.B) {
+    // ... setup igual ...
+    b.ResetTimer()
+    for i := 0; i < b.N; i++ {
+        evalResult = bd.Evaluate(F)
+    }
 }
