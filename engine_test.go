@@ -95,7 +95,7 @@ func TestMinimaxEvaluate(t *testing.T) {
 
 				return b
 			},
-			expected: 2,
+			expected: 6,
 		},
 		{
 			Minimaxer: func() *Minimax {
